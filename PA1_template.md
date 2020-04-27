@@ -7,7 +7,8 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r, echo=TRUE}
+
+```r
 options(stringsAsFactors = FALSE)
 ## Load the data (i.e. `read.csv()`)
 unzip("activity.zip")
@@ -18,7 +19,8 @@ dataset$date <- as.Date(dataset$date, "%Y-%m-%d")
 
 
 ## What is mean total number of steps taken per day?
-```{r, echo=TRUE}
+
+```r
 ## Ignore the missing values in the dataset.
 nonadata <- na.omit(dataset)
 ## Calculate the total number of steps taken each day.
@@ -30,14 +32,31 @@ for (i in 1:length(dates)) {
 dailysteps <- sapply(templist, sum)
 ## Make a histogram of the total number of steps taken each day.
 hist(dailysteps, col = "cyan", main = "total number of steps taken each day")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+```r
 ## Calculate and report the mean and median total number of steps taken per day.
 print(paste("The mean total number of steps taken each day was", mean(dailysteps)))
+```
+
+```
+## [1] "The mean total number of steps taken each day was 10766.1886792453"
+```
+
+```r
 print(paste("The median total number of steps taken each day was", median(dailysteps)))
+```
+
+```
+## [1] "The median total number of steps taken each day was 10765"
 ```
 
 
 ## What is the average daily activity pattern?
-```{r, echo=TRUE}
+
+```r
 ## Calculate average number of steps taken, averaged across all days.
 intervals <- unique(nonadata$interval)
 templist <- list()
@@ -49,17 +68,34 @@ aveintsteps <- sapply(templist, mean)
 ## average number of steps taken, averaged across all days (y-axis).
 plot(intervals, aveintsteps, type = "l", main = "average daily activity pattern", 
      xlab = "intervals", ylab = "average steps across the recorded dates")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
 ## Print the 5-minute interval with the maximum number of steps.
 print(paste("The 5-minute interval that contains the maximum number of steps on average across all the days in the dataset is no.", 
             intervals[which(aveintsteps == max(aveintsteps))]))
 ```
 
+```
+## [1] "The 5-minute interval that contains the maximum number of steps on average across all the days in the dataset is no. 835"
+```
+
 
 ## Imputing missing values
-```{r, echo=TRUE}
+
+```r
 ## Calculate and report the total number of missing values in the dataset.
 narows <- !complete.cases(dataset)
 print(paste("The total number of rows with `NA`s were", sum(narows)))
+```
+
+```
+## [1] "The total number of rows with `NA`s were 2304"
+```
+
+```r
 ## Create a new dataset that is equal to the original dataset but 
 ## with the missing data filled in by means for the 5-minute intervals.
 nafilleddata <- dataset
@@ -75,13 +111,30 @@ for (i in 1:length(dates)) {
 }
 dailysteps <- sapply(templist, sum)
 hist(dailysteps, col = "cyan", main = "total number of steps taken each day")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+```r
 print(paste("The mean total number of steps taken each day was", mean(dailysteps)))
+```
+
+```
+## [1] "The mean total number of steps taken each day was 10766.1886792453"
+```
+
+```r
 print(paste("The median total number of steps taken each day was", median(dailysteps)))
+```
+
+```
+## [1] "The median total number of steps taken each day was 10766.1886792453"
 ```
 With such a strategy to fill in NA values, the mean total numbers of steps taken each day remain the same, and the median total numbers of steps taken each day are shifted to the mean compared with the estimates from the first part.
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r, echo=TRUE}
+
+```r
 ## Create a factor variable "day" in the dataset indicating whether a given date 
 ## is a weekday or weekend day.
 days <- vector(length = nrow(nafilleddata))
@@ -110,3 +163,5 @@ plot(intervals, aveweekday, type = "l", main = "weekday",
 plot(intervals, aveweekend, type = "l", main = "weekend", 
      xlab = "", ylab = "Number of steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
